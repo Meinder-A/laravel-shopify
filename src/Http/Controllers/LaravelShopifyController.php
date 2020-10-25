@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MeinderA\LaravelShopify\Http\Controllers;
 
 use Exception;

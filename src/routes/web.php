@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use MeinderA\LaravelShopify\Http\Controllers\LaravelShopifyController;
 
 $config = config();

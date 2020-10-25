@@ -16,7 +16,8 @@
     ],
     "require": {
         "php": "^7.4",
-        "laravel/framework": "^8.10"
+        "laravel/framework": "^8.10",
+        "degraciamathieu/manager": "^1.2"
     },
     "require-dev": {
         "phpunit/phpunit": "^8.0"

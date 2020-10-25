@@ -1,22 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MeinderA\LaravelShopify;
 
 use Illuminate\Support\ServiceProvider;
 use MeinderA\LaravelShopify\Services\LaravelShopifyService;
-use MeinderA\LaravelShopify\Services\LaravelShopifyApiCallerService;
+use MeinderA\LaravelShopify\Managers\LaravelShopifyApiManager;
 use MeinderA\LaravelShopify\Http\Middleware\LaravelShopifyInstallationCapture;
 
 class LaravelShopifyServiceProvider extends ServiceProvider
 {
     public function register()
     {
-        $this->app->bind(LaravelShopifyApiCallerService::class, function ($app) {
-            return new LaravelShopifyApiCallerService($app['config']);
-        });
-
         $this->app->bind(LaravelShopifyService::class, function ($app) {
-            return new LaravelShopifyService($app['config'], $app->make(LaravelShopifyApiCallerService::class));
+            return new LaravelShopifyService($app['config'], $app->make(LaravelShopifyApiManager::class));
         });
     }
 
@@ -33,7 +31,7 @@ class LaravelShopifyServiceProvider extends ServiceProvider
     public function provides()
     {
         return [
-            LaravelShopifyService::class, LaravelShopifyApiCallerService::class,
+            LaravelShopifyService::class, LaravelShopifyApiManager::class,
         ];
     }
 }

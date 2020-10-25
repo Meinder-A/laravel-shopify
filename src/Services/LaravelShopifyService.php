@@ -1,27 +1,30 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MeinderA\LaravelShopify\Services;
 
 use Exception;
 use Illuminate\Config\Repository as Config;
+use MeinderA\LaravelShopify\Managers\LaravelShopifyApiManager;
 
 class LaravelShopifyService
 {
     protected Config $config;
 
-    protected LaravelShopifyApiCallerService $laravelShopifyApiCaller;
+    protected LaravelShopifyApiManager $laravelShopifyApiManager;
 
-    public function __construct(Config $config, LaravelShopifyApiCallerService $laravelShopifyApiCaller)
+    public function __construct(Config $config, LaravelShopifyApiManager $laravelShopifyApiManager)
     {
         $this->config = $config;
-        $this->laravelShopifyApiCaller = $laravelShopifyApiCaller;
+        $this->laravelShopifyApiManager = $laravelShopifyApiManager;
     }
 
     public function buildApprovalUrl(): string
     {
         $shop = $this->config->get('shopify.shop_name');
-        $apiKey = $this->config->get('shopify.api_key');
-        $scopes = $this->config->get('shopify.scopes');
+        $apiKey = $this->config->get('shopify.drivers.client.key');
+        $scopes = $this->config->get('shopify.drivers.client.scopes');
         $redirectUrl = route('shopify.generate_access_token');
 
         return "https://$shop.myshopify.com/admin/oauth/authorize?client_id=$apiKey&scope=$scopes&redirect_uri=$redirectUrl";
@@ -30,7 +33,7 @@ class LaravelShopifyService
     public function checkHmac(string $hmac, array $params): bool
     {
         $params = http_build_query($params);
-        $sharedSecretKey = $this->config->get('shopify.shared_secret_key');
+        $sharedSecretKey = $this->config->get('shopify.drivers.client.secret');
 
         $computedHmac = hash_hmac('sha256', $params, $sharedSecretKey);
 
@@ -47,12 +50,12 @@ class LaravelShopifyService
 
         $url = 'https://' . $shop . '.myshopify.com/admin/oauth/access_token';
         $params = [
-            'client_id' => $this->config->get('shopify.api_key'),
-            'client_secret' => $this->config->get('shopify.shared_secret_key'),
+            'client_id' => $this->config->get('shopify.drivers.client.api'),
+            'client_secret' => $this->config->get('shopify.drivers.client.secret'),
             'code' => $code
         ];
 
-        $response = $this->laravelShopifyApiCaller->post($url, $params);
+        $response = $this->laravelShopifyApiManager->post($url, $params);
         $response = json_decode($response);
 
         if ($response->result === "error") {
@@ -73,7 +76,7 @@ class LaravelShopifyService
      */
     public function getProducts(): string
     {
-        $response = $this->laravelShopifyApiCaller->allo('admin/products.json');
+        $response = $this->laravelShopifyApiManager->allo('admin/products.json');
         $response = json_decode($response);
 
         if ($response->result === "error") {
@@ -88,7 +91,7 @@ class LaravelShopifyService
      */
     public function getOrders(): string
     {
-        $response = $this->laravelShopifyApiCaller->allo('admin/orders.json');
+        $response = $this->laravelShopifyApiManager->allo('admin/orders.json');
         $response = json_decode($response);
 
         if ($response->result === "error") {

@@ -1,15 +1,15 @@
 <?php
 
-namespace MeinderA\LaravelShopify\Services;
+namespace MeinderA\LaravelShopify\Managers\Drivers;
 
 use Exception;
-use Illuminate\Config\Repository as Config;
+use MeinderA\LaravelShopify\Managers\Contracts\Driver;
 
-class LaravelShopifyApiCallerService
+class Client implements Driver
 {
-    protected Config $config;
+    protected array $config;
 
-    public function __construct(Config $config)
+    public function __construct(array $config)
     {
         $this->config = $config;
     }
@@ -19,11 +19,11 @@ class LaravelShopifyApiCallerService
      */
     public function allo(string $endpoint, array $params = [], string $method = 'GET', array $headers = []): string
     {
-        if (! $this->config->has('shopify.access_token')) {
+        if (! isset($this->config['access_token'])) {
             throw new Exception("Access token has not been initialized!");
         }
 
-        $token = $this->config->get('shopify.access_token');
+        $token = $this->config['access_token'];
 
         $shopName = $this->config->get('shopify.shop_name');
         $urlEndpoint = "https://$shopName.myshopify.com/$endpoint";
@@ -64,7 +64,7 @@ class LaravelShopifyApiCallerService
         return $this->execCurl($curl);
     }
 
-    public function post(string $url, array $params): string
+    public function post(string $url, array $params = []): string
     {
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
@@ -75,7 +75,7 @@ class LaravelShopifyApiCallerService
         return $this->execCurl($curl);
     }
 
-    public function get(string $url, array $params): string
+    public function get(string $url, array $params = []): string
     {
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
