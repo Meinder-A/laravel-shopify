@@ -15,4 +15,9 @@ class LaravelShopifyApiRepository
     {
         return $this->driver->allo($endpoint, $params, $method, $headers);
     }
+
+    public function post(string $url, array $params = []): string
+    {
+        return $this->driver->post($url, $params);
+    }
 }

@@ -12,7 +12,6 @@ class LaravelShopifyApiManager extends Manager
 
     public function __construct(Config $config)
     {
-        dd('hi');
         $this->config = $config;
     }
 

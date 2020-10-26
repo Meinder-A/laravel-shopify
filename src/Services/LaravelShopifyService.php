@@ -50,7 +50,7 @@ class LaravelShopifyService
 
         $url = 'https://' . $shop . '.myshopify.com/admin/oauth/access_token';
         $params = [
-            'client_id' => $this->config->get('shopify.drivers.client.api'),
+            'client_id' => $this->config->get('shopify.drivers.client.key'),
             'client_secret' => $this->config->get('shopify.drivers.client.secret'),
             'code' => $code
         ];
