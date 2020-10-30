@@ -9,6 +9,7 @@ return [
             'key' => env('SHOPIFY_API_KEY'),
             'secret' => env('SHOPIFY_API_SHARED_SECRET_KEY'),
             'scopes' => env('SHOPIFY_API_SCOPES', 'read_products,read_orders'),
+            'access_token' => env('SHOPIFY_ACCESS_TOKEN'),
         ],
         'mock' => [
             'products' => [
@@ -24,6 +25,4 @@ return [
 
     'install_url' => env('SHOPIFY_INSTALL_URL', 'shopify/install'),
     'generate_access_token' => env('SHOPIFY_GENERATE_ACCESS_TOKEN_URL', 'shopify/store_token'),
-
-    'access_token' => env('SHOPIFY_ACCESS_TOKEN'),
 ];
