@@ -19,13 +19,13 @@ class Client implements Driver
      */
     public function allo(string $endpoint, array $params = [], string $method = 'GET', array $headers = []): string
     {
-        if (! isset($this->config['access_token'])) {
+        if (! isset($this->config['drivers']['client']['access_token'])) {
             throw new Exception("Access token has not been initialized!");
         }
 
-        $token = $this->config['access_token'];
+        $token = $this->config['drivers']['client']['access_token'];
 
-        $shopName = $this->config->get('shopify.shop_name');
+        $shopName = $this->config['shop_name'];
         $urlEndpoint = "https://$shopName.myshopify.com/$endpoint";
 
         return $this->request($method, $urlEndpoint, $params, $token);

@@ -17,7 +17,7 @@ class LaravelShopifyApiManager extends Manager
 
     public function createClientDriver(): LaravelShopifyApiRepository
     {
-        $config = $this->config->get('shopify.drivers.client');
+        $config = $this->config->get('shopify');
 
         $driver = new Drivers\Client($config);
 
@@ -26,7 +26,7 @@ class LaravelShopifyApiManager extends Manager
 
     public function createMockDriver(): LaravelShopifyApiRepository
     {
-        $config = $this->config->get('shopify.drivers.mock');
+        $config = $this->config->get('shopify');
 
         $driver = new Drivers\Mock($config);
 
